@@ -1,0 +1,60 @@
+/**
+ * PHARMA LINK — RTL / LTR refinements
+ */
+[dir="rtl"] body { text-align: right; }
+[dir="ltr"] body { text-align: left; }
+
+[dir="rtl"] .pl-search i { inset-inline-start: 12px; }
+[dir="rtl"] .dropdown-menu-end { --bs-position: end; }
+
+[dir="rtl"] .form-check {
+  padding-right: 1.75em;
+  padding-left: 0;
+}
+[dir="rtl"] .form-check .form-check-input {
+  float: right;
+  margin-right: -1.75em;
+  margin-left: 0;
+}
+
+[dir="rtl"] .modal-header .btn-close {
+  margin: -0.5rem auto -0.5rem -0.5rem;
+}
+
+[dir="rtl"] .breadcrumb-item + .breadcrumb-item::before {
+  float: right;
+  padding-left: 0.5rem;
+  padding-right: 0;
+}
+
+[dir="rtl"] .dataTables_wrapper .dataTables_filter { text-align: left; }
+
+/* Bootstrap spacing helpers used in modules */
+html[dir="rtl"] .me-1 { margin-left: 0.25rem !important; margin-right: 0 !important; }
+html[dir="rtl"] .me-2 { margin-left: 0.5rem !important; margin-right: 0 !important; }
+html[dir="rtl"] .ms-1 { margin-right: 0.25rem !important; margin-left: 0 !important; }
+html[dir="rtl"] .ms-2 { margin-right: 0.5rem !important; margin-left: 0 !important; }
+html[dir="rtl"] .ms-auto { margin-right: auto !important; margin-left: 0 !important; }
+html[dir="rtl"] .me-auto { margin-left: auto !important; margin-right: 0 !important; }
+html[dir="rtl"] .text-start { text-align: right !important; }
+html[dir="rtl"] .text-end { text-align: left !important; }
+html[dir="rtl"] .text-md-end { text-align: left !important; }
+
+html[dir="ltr"] .text-start { text-align: left !important; }
+html[dir="ltr"] .text-end { text-align: right !important; }
+
+/* Chevron / arrow flips for back links */
+[dir="rtl"] .bi-arrow-left::before { content: "\f138"; } /* right */
+[dir="ltr"] .bi-arrow-right.rtl-aware::before { content: "\f12a"; }
+
+/* Select2 clear button */
+[dir="rtl"] .select2-container--bootstrap-5 .select2-selection__clear {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+/* Numeric columns stay end-aligned in both dirs via logical properties */
+.pl-table .num,
+.pl-table td.num {
+  text-align: end;
+}

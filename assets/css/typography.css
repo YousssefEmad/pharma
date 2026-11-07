@@ -1,0 +1,110 @@
+/**
+ * PHARMA LINK — Typography
+ */
+:root {
+  --pl-fs-xs: 0.75rem;    /* 12 */
+  --pl-fs-sm: 0.8125rem;  /* 13 */
+  --pl-fs-md: 0.875rem;   /* 14 */
+  --pl-fs-base: 0.9375rem;/* 15 */
+  --pl-fs-lg: 1.0625rem;  /* 17 */
+  --pl-fs-xl: 1.25rem;    /* 20 */
+  --pl-fs-2xl: 1.5rem;    /* 24 */
+  --pl-fs-3xl: 1.75rem;   /* 28 */
+  --pl-lh-tight: 1.25;
+  --pl-lh-snug: 1.4;
+  --pl-lh-normal: 1.6;
+  --pl-lh-ar: 1.7;
+  --pl-tracking-tight: -0.01em;
+  --pl-tracking-wide: 0.04em;
+}
+
+html[lang="ar"] body,
+html[dir="rtl"] body {
+  font-family: var(--pl-font);
+  line-height: var(--pl-lh-ar);
+  letter-spacing: 0;
+}
+
+html[lang="en"] body,
+html[dir="ltr"] body {
+  font-family: var(--pl-font-en);
+  line-height: var(--pl-lh-normal);
+  letter-spacing: var(--pl-tracking-tight);
+}
+
+.pl-page-title {
+  font-size: var(--pl-fs-2xl);
+  font-weight: 650;
+  letter-spacing: var(--pl-tracking-tight);
+  line-height: var(--pl-lh-tight);
+  color: var(--pl-text-strong);
+  margin: 0 0 4px;
+}
+
+.pl-page-desc {
+  margin: 0;
+  color: var(--pl-text-muted);
+  font-size: var(--pl-fs-md);
+  line-height: var(--pl-lh-snug);
+  max-width: 62ch;
+}
+
+.pl-card-title {
+  font-size: var(--pl-fs-md);
+  font-weight: 600;
+  color: var(--pl-text-strong);
+  margin: 0;
+  letter-spacing: var(--pl-tracking-tight);
+}
+
+.pl-section-label {
+  font-size: var(--pl-fs-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--pl-tracking-wide);
+  color: var(--pl-text-faint);
+}
+
+.pl-metric-value {
+  font-size: var(--pl-fs-2xl);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--pl-text-strong);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.15;
+}
+
+.pl-metric-label {
+  font-size: var(--pl-fs-sm);
+  color: var(--pl-text-muted);
+  font-weight: 500;
+}
+
+.pl-mono {
+  font-family: var(--pl-font-mono);
+  font-size: 0.92em;
+  font-variant-numeric: tabular-nums;
+}
+
+.pl-breadcrumb {
+  font-size: var(--pl-fs-sm);
+  color: var(--pl-text-muted);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--pl-text-strong);
+  font-weight: 650;
+  letter-spacing: var(--pl-tracking-tight);
+}
+
+.form-label {
+  font-size: var(--pl-fs-sm);
+  font-weight: 600;
+  color: var(--pl-text);
+  margin-bottom: 6px;
+}
+
+.form-text, .helper {
+  font-size: var(--pl-fs-xs);
+  color: var(--pl-text-muted);
+}

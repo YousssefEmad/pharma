@@ -1,0 +1,99 @@
+/**
+ * PHARMA LINK — Responsive
+ */
+
+/* Large laptop */
+@media (max-width: 1439.98px) {
+  :root { --pl-content-max: 1240px; }
+  .pl-header-center { max-width: 340px; }
+}
+
+@media (max-width: 1199.98px) {
+  .pl-stat-value { font-size: 1.2rem; }
+  .pl-chart-box { height: 220px; }
+}
+
+/* Tablet / small laptop — drawer sidebar (≤1199 so 1024 tablets are not cramped) */
+@media (max-width: 1199.98px) {
+  .pl-sidebar {
+    transform: translateX(-100%);
+    width: min(280px, 86vw) !important;
+    box-shadow: var(--pl-shadow-lg);
+  }
+  [dir="rtl"] .pl-sidebar { transform: translateX(100%); }
+  .pl-sidebar.mobile-open { transform: translateX(0); }
+  .pl-main,
+  .pl-app.sidebar-collapsed .pl-main,
+  .pl-sidebar.collapsed ~ .pl-main {
+    margin-inline-start: 0 !important;
+  }
+  .pl-auth { grid-template-columns: 1fr; }
+  .pl-auth-visual { min-height: 180px; padding: 28px; }
+  .pl-user-meta { display: none; }
+  .pl-content { padding: 16px; }
+  .pl-page-header { flex-direction: column; align-items: stretch; }
+  .pl-page-actions { width: 100%; }
+  .pl-page-actions .btn { flex: 1 1 auto; }
+  .pl-demo-chip { display: none; }
+  .pl-header-brand { display: inline-flex; }
+}
+
+@media (max-width: 768px) {
+  .pl-header { padding: 0 12px; gap: 4px; }
+  .pl-header-center { display: none; }
+  .pl-header-brand { display: inline-flex; }
+  .pl-page-title { font-size: 1.25rem; }
+  .pl-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .pl-filters .form-control,
+  .pl-filters .form-select { width: 100%; min-width: 0; }
+  .pl-chart-box { height: 200px; }
+  .pl-chart-box.sm { height: 170px; }
+  .pl-auth-card { padding: 24px 18px; border-radius: var(--pl-radius-lg); }
+  .pl-auth-visual { display: none; }
+  .pl-table { font-size: 0.8rem; }
+  .pl-table th, .pl-table td { padding: 8px 10px; }
+  .pl-countdown { font-size: 0.8rem; width: 100%; justify-content: center; }
+  .pl-wizard-step { min-width: 96px; }
+  .pl-welcome { flex-direction: column; align-items: flex-start; }
+  .pl-po-doc { padding: 18px; }
+
+  /* Prefer card lists over dense tables when marked */
+  .pl-table-responsive-cards .pl-table-wrap { display: none; }
+  .pl-table-responsive-cards .pl-mobile-cards { display: block; }
+}
+
+@media (max-width: 575.98px) {
+  .pl-stat { padding: 12px; }
+  .pl-card-body { padding: 12px; }
+  .pl-content { padding: 12px; }
+  .pl-stat-value { font-size: 1.1rem; }
+  .pl-lang-btn {
+    padding: 0 10px;
+    height: 36px;
+  }
+  .pl-lang-btn .pl-lang-code { font-size: 0.7rem; }
+  .pl-user-chip { max-width: 48px; padding-inline: 3px; }
+  .pl-user-chip .bi-chevron-down { display: none; }
+  .pl-table { min-width: 480px; }
+  .pl-page-actions .btn { flex: 1 1 100%; }
+}
+
+@media (max-width: 768px) {
+  div.dataTables_wrapper div.dataTables_length,
+  div.dataTables_wrapper div.dataTables_filter,
+  div.dataTables_wrapper div.dataTables_info,
+  div.dataTables_wrapper div.dataTables_paginate {
+    text-align: start !important;
+    margin-bottom: 8px;
+  }
+}
+
+/* Touch targets */
+@media (hover: none) and (pointer: coarse) {
+  .pl-nav-link { padding: 11px 12px; }
+  .btn { min-height: 40px; }
+  .pl-icon-btn { width: 40px; height: 40px; }
+}

@@ -1,0 +1,170 @@
+/**
+ * PharmaLink — Official Design Tokens
+ * Brand colors are defined once here. Do not hardcode brand hex values in pages.
+ */
+:root {
+  /* —— Official brand palette —— */
+  --pl-brand-navy: #073C78;
+  --pl-brand-blue: #0879D8;
+  --pl-brand-teal: #12BFC0;
+  --pl-brand-bg: #F4F8FD;
+  --pl-brand-text: #172B4D;
+  --pl-brand-success: #16A36A;
+
+  /* Derived navy scale (anchored to Primary Navy) */
+  --pl-navy-950: #041f3f;
+  --pl-navy-900: #073C78;
+  --pl-navy-800: #0a4a94;
+  --pl-navy-700: #0d5aad;
+  --pl-navy-100: #d6e4f5;
+  --pl-navy-50: #eef4fb;
+
+  /* Derived blue scale (anchored to Primary Blue) */
+  --pl-blue-700: #0666b8;
+  --pl-blue-600: #0879D8;
+  --pl-blue-500: #2b8fe0;
+  --pl-blue-400: #5aabe9;
+  --pl-blue-100: #d6ebfa;
+  --pl-blue-50: #eaf4fc;
+
+  /* Derived teal scale (accent only) */
+  --pl-teal-700: #0e9ea0;
+  --pl-teal-600: #12BFC0;
+  --pl-teal-500: #2fc9ca;
+  --pl-teal-100: #d0f4f4;
+  --pl-teal-50: #e8fafa;
+
+  /* Semantic roles — navy/blue dominate; teal is accent */
+  --pl-primary: var(--pl-brand-navy);
+  --pl-primary-hover: #0a4a94;
+  --pl-secondary: var(--pl-brand-blue);
+  --pl-secondary-hover: var(--pl-blue-700);
+  --pl-accent: var(--pl-brand-teal);
+  --pl-accent-hover: var(--pl-teal-700);
+  --pl-accent-soft: var(--pl-teal-50);
+
+  --pl-success: var(--pl-brand-success);
+  --pl-success-soft: #e8f7f0;
+  --pl-warning: #d97706;
+  --pl-warning-soft: #fffbeb;
+  --pl-danger: #e11d48;
+  --pl-danger-soft: #fff1f2;
+  --pl-info: var(--pl-brand-blue);
+  --pl-info-soft: var(--pl-blue-50);
+
+  /* Surfaces */
+  --pl-bg: var(--pl-brand-bg);
+  --pl-bg-subtle: #e8eef8;
+  --pl-surface: #ffffff;
+  --pl-surface-elevated: #ffffff;
+  --pl-surface-muted: #f7fafd;
+
+  /* Text */
+  --pl-text: var(--pl-brand-text);
+  --pl-text-strong: #0f1f3a;
+  --pl-text-muted: #5a6b85;
+  --pl-text-faint: #8b9bb3;
+  --pl-text-invert: #f8fafc;
+  --pl-text-on-primary: #ffffff;
+
+  /* Borders */
+  --pl-border: #dde5f0;
+  --pl-border-strong: #c5d0e0;
+  --pl-border-focus: rgba(8, 121, 216, 0.45);
+  --pl-divider: #e8eef6;
+
+  /* Sidebar — Primary Navy surface */
+  --pl-sidebar-bg: var(--pl-brand-navy);
+  --pl-sidebar-bg-elevated: #0a4a94;
+  --pl-sidebar-text: rgba(244, 248, 253, 0.82);
+  --pl-sidebar-text-active: #ffffff;
+  --pl-sidebar-hover: rgba(255, 255, 255, 0.08);
+  --pl-sidebar-active: rgba(18, 191, 192, 0.18);
+  --pl-sidebar-border: rgba(255, 255, 255, 0.1);
+  --pl-sidebar-width: 256px;
+  --pl-sidebar-collapsed: 72px;
+
+  /* Layout */
+  --pl-header-height: 60px;
+  --pl-content-max: 1400px;
+  --pl-banner-height: 0px;
+  --pl-logo-clearance: 8px;
+
+  /* Radii */
+  --pl-radius-xs: 4px;
+  --pl-radius-sm: 6px;
+  --pl-radius: 8px;
+  --pl-radius-md: 10px;
+  --pl-radius-lg: 14px;
+  --pl-radius-xl: 18px;
+  --pl-radius-pill: 999px;
+
+  /* Shadows */
+  --pl-shadow-xs: 0 1px 0 rgba(7, 60, 120, 0.04);
+  --pl-shadow: 0 1px 2px rgba(7, 60, 120, 0.05), 0 1px 3px rgba(7, 60, 120, 0.06);
+  --pl-shadow-md: 0 4px 16px rgba(7, 60, 120, 0.08);
+  --pl-shadow-lg: 0 12px 32px rgba(7, 60, 120, 0.12);
+  --pl-shadow-focus: 0 0 0 3px rgba(8, 121, 216, 0.2);
+
+  /* Spacing */
+  --pl-space-1: 4px;
+  --pl-space-2: 8px;
+  --pl-space-3: 12px;
+  --pl-space-4: 16px;
+  --pl-space-5: 20px;
+  --pl-space-6: 24px;
+  --pl-space-8: 32px;
+  --pl-space-10: 40px;
+  --pl-space-12: 48px;
+
+  /* Motion */
+  --pl-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --pl-transition: 160ms var(--pl-ease);
+  --pl-transition-slow: 240ms var(--pl-ease);
+
+  /* Control */
+  --pl-control-h: 40px;
+  --pl-control-h-sm: 34px;
+
+  /* Charts — blue/navy dominant; teal accent; semantic extras for series */
+  --pl-chart-1: var(--pl-brand-blue);
+  --pl-chart-2: var(--pl-brand-navy);
+  --pl-chart-3: var(--pl-brand-teal);
+  --pl-chart-4: var(--pl-warning);
+  --pl-chart-5: #64748b;
+  --pl-chart-6: var(--pl-brand-success);
+  --pl-chart-grid: #e8eef6;
+  --pl-chart-label: #5a6b85;
+
+  /* Z-index */
+  --pl-z-sticky: 1020;
+  --pl-z-sidebar: 1040;
+  --pl-z-backdrop: 1035;
+  --pl-z-dropdown: 1060;
+  --pl-z-modal: 1080;
+  --pl-z-toast: 1100;
+  --pl-z-banner: 2000;
+
+  /* Fonts set in typography.css */
+  --pl-font: 'IBM Plex Sans Arabic', 'Cairo', 'Inter', system-ui, sans-serif;
+  --pl-font-en: 'Inter', 'IBM Plex Sans Arabic', system-ui, sans-serif;
+  --pl-font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Legacy aliases */
+  --pl-primary-600: var(--pl-brand-blue);
+  --pl-primary-700: var(--pl-brand-navy);
+  --pl-secondary-500: var(--pl-brand-blue);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --pl-transition: 0ms;
+    --pl-transition-slow: 0ms;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

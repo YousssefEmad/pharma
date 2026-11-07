@@ -1,0 +1,14 @@
+{
+  "name": "pharma-link",
+  "version": "1.0.0",
+  "description": "PHARMA LINK — Pharmaceutical Warehouse Management & Smart B2B Procurement (Frontend Prototype)",
+  "private": true,
+  "scripts": {
+    "start": "npx --yes serve -l 5500 .",
+    "serve": "npx --yes serve -l 5500 .",
+    "python": "python -m http.server 5500"
+  },
+  "keywords": ["pharma", "warehouse", "procurement", "prototype"],
+  "author": "PHARMA LINK Demo",
+  "license": "UNLICENSED"
+}
