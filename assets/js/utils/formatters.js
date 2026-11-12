@@ -100,7 +100,15 @@ window.Formatters = (function () {
       critical: 'badge-danger',
       high: 'badge-warning',
       medium: 'badge-info',
-      low: 'badge-muted'
+      low: 'badge-muted',
+      partially_covered: 'badge-warning',
+      converted: 'badge-info',
+      requested: 'badge-warning',
+      reserved: 'badge-teal',
+      shipped: 'badge-info',
+      received: 'badge-success',
+      in_transit: 'badge-info',
+      completed: 'badge-success'
     };
     const cls = map[status] || 'badge-muted';
     const label = t('status_' + status) !== 'status_' + status ? t('status_' + status) : (t(status) !== status ? t(status) : status);

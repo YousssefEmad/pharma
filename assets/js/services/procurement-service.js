@@ -371,9 +371,45 @@ window.NotificationService = (function () {
 })();
 
 window.ShortageService = (function () {
+  function enrich(s) {
+    const covered = Number(s.coveredQty) || 0;
+    const requested = Number(s.requestedQty) || 0;
+    const remaining = Math.max(0, requested - covered);
+    const status = s.status || (covered >= requested && requested > 0 ? 'closed' : covered > 0 ? 'partially_covered' : 'open');
+    return Object.assign({}, s, {
+      coveredQty: covered,
+      remainingQty: remaining,
+      status: status,
+      product: DataAPI.findProduct(s.productId),
+      warehouse: DataAPI.data().warehouses.find(function (w) { return w.id === s.warehouseId; })
+    });
+  }
+
   function list(warehouseId) {
     const wid = warehouseId || Auth.getSession().warehouseId;
-    return DataAPI.data().shortages.filter(function (s) { return s.warehouseId === wid; });
+    return DataAPI.data().shortages
+      .filter(function (s) { return s.warehouseId === wid; })
+      .map(enrich);
+  }
+
+  function listOrg(orgId) {
+    const wids = DataAPI.data().warehouses
+      .filter(function (w) { return w.orgId === orgId; })
+      .map(function (w) { return w.id; });
+    return DataAPI.data().shortages
+      .filter(function (s) { return wids.indexOf(s.warehouseId) !== -1; })
+      .map(enrich)
+      .sort(function (a, b) { return new Date(b.createdAt) - new Date(a.createdAt); });
+  }
+
+  function coverageFor(shortage) {
+    const session = Auth.getSession();
+    const orgId = session.orgId;
+    const peers = InventoryService.peerAvailability(orgId, shortage.productId, shortage.warehouseId);
+    return {
+      remaining: Math.max(0, (Number(shortage.requestedQty) || 0) - (Number(shortage.coveredQty) || 0)),
+      peers: peers
+    };
   }
 
   function addMany(items) {
@@ -383,12 +419,16 @@ window.ShortageService = (function () {
         d.counters.shortage = (d.counters.shortage || 0) + 1;
         d.shortages.push({
           id: 'SH-' + String(d.counters.shortage).padStart(3, '0'),
-          warehouseId: session.warehouseId,
+          warehouseId: it.warehouseId || session.warehouseId,
           productId: it.productId,
           requestedQty: Number(it.requestedQty) || 0,
+          coveredQty: 0,
+          status: 'open',
           source: it.source || 'manual',
           urgency: it.urgency || 'medium',
           notes: it.notes || '',
+          linkedReservationIds: [],
+          linkedRequestId: null,
           createdAt: new Date().toISOString()
         });
       });
@@ -415,38 +455,81 @@ window.ShortageService = (function () {
     DataAPI.save(function (d) {
       const session = Auth.getSession();
       const map = {};
-      const keep = [];
       d.shortages.forEach(function (s) {
-        if (s.warehouseId !== session.warehouseId) { keep.push(s); return; }
+        if (s.warehouseId !== session.warehouseId) return;
+        if (s.status === 'closed') return;
         if (map[s.productId]) {
           map[s.productId].requestedQty += Number(s.requestedQty) || 0;
+          map[s.productId].coveredQty = (Number(map[s.productId].coveredQty) || 0) + (Number(s.coveredQty) || 0);
         } else {
           map[s.productId] = Object.assign({}, s);
-          keep.push(map[s.productId]);
         }
       });
-      // rebuild shortages: non-warehouse + merged
-      const others = d.shortages.filter(function (s) { return s.warehouseId !== session.warehouseId; });
+      const others = d.shortages.filter(function (s) {
+        return s.warehouseId !== session.warehouseId || s.status === 'closed';
+      });
       d.shortages = others.concat(Object.keys(map).map(function (k) { return map[k]; }));
       return d;
     });
   }
 
-  function convertToRequest(selectedIds, invitedSuppliers) {
+  function convertToRequest(selectedIds, invitedSuppliers, residualOnly) {
     const session = Auth.getSession();
-    const shortages = list().filter(function (s) { return !selectedIds || selectedIds.indexOf(s.id) !== -1; });
+    const shortages = list().filter(function (s) {
+      if (selectedIds && selectedIds.indexOf(s.id) === -1) return false;
+      if (s.status === 'closed') return false;
+      return true;
+    });
+    const items = shortages.map(function (s) {
+      const qty = residualOnly ? s.remainingQty : s.requestedQty;
+      return { productId: s.productId, qty: qty, notes: s.notes || '', shortageId: s.id };
+    }).filter(function (it) { return it.qty > 0; });
+    if (!items.length) return null;
     const payload = {
       buyerOrgId: session.orgId,
       warehouseId: session.warehouseId,
       status: 'draft',
-      notes: '',
+      notes: residualOnly ? 'متبقي بعد تغطية بين المخازن' : '',
       invitedSuppliers: invitedSuppliers || [],
-      items: shortages.map(function (s) {
-        return { productId: s.productId, qty: s.requestedQty, notes: s.notes || '' };
-      })
+      items: items
     };
-    return ProcurementService.saveRequest(payload);
+    const req = ProcurementService.saveRequest(payload);
+    DataAPI.save(function (d) {
+      items.forEach(function (it) {
+        const sh = d.shortages.find(function (s) { return s.id === it.shortageId; });
+        if (sh) {
+          sh.linkedRequestId = req.id;
+          if (!residualOnly) sh.status = 'converted';
+          else if (sh.status === 'open') sh.status = 'partially_covered';
+        }
+      });
+      return d;
+    });
+    return req;
   }
 
-  return { list, addMany, update, remove, mergeDuplicates, convertToRequest };
+  function networkBoard(orgId) {
+    const rows = listOrg(orgId).filter(function (s) { return s.status !== 'closed'; });
+    return rows.map(function (s) {
+      const cov = coverageFor(s);
+      return Object.assign({}, s, {
+        peerStock: cov.peers,
+        peerAvailableTotal: cov.peers.reduce(function (n, p) { return n + p.available; }, 0),
+        remaining: cov.remaining
+      });
+    });
+  }
+
+  return {
+    list: list,
+    listOrg: listOrg,
+    coverageFor: coverageFor,
+    addMany: addMany,
+    update: update,
+    remove: remove,
+    mergeDuplicates: mergeDuplicates,
+    convertToRequest: convertToRequest,
+    networkBoard: networkBoard,
+    enrich: enrich
+  };
 })();

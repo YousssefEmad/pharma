@@ -20,8 +20,9 @@ window.PermissionService = (function () {
         { id: 'catalog', icon: 'bi-journal-medical', label: 'catalog', href: '/buyer/catalog.html' }
       ]},
       { section: 'navProcurement', items: [
-        { id: 'shortages', icon: 'bi-exclamation-triangle', label: 'shortages', href: '/buyer/shortages.html' },
+        { id: 'shortages', icon: 'bi-exclamation-triangle', label: 'shortageNetwork', href: '/buyer/shortages.html?tab=network' },
         { id: 'shortageImport', icon: 'bi-file-earmark-excel', label: 'shortageImport', href: '/buyer/shortage-import.html' },
+        { id: 'reservationTracking', icon: 'bi-bookmark-check', label: 'reservationTracking', href: '/buyer/stock-transfers.html?tab=reservations' },
         { id: 'procurementRequests', icon: 'bi-cart-plus', label: 'procurementRequests', href: '/buyer/procurement-requests.html' },
         { id: 'offerComparison', icon: 'bi-bar-chart-steps', label: 'offerComparison', href: '/buyer/offer-comparison.html' },
         { id: 'allocationReview', icon: 'bi-diagram-3', label: 'allocationReview', href: '/buyer/allocation-review.html' },

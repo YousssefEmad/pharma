@@ -492,17 +492,48 @@ window.DemoData = (function () {
       { id: 'SI-1105', customerId: 'CUS-005', date: daysAgo(4).slice(0, 10), total: 9800, status: 'paid' }
     ];
 
+    // Branch warehouse stock — surplus where main warehouse is short
+    const branchSeed = [
+      { productId: 'PRD-001', onHand: 140, reserved: 20, minStock: 20, reorderLevel: 30, avgDailyUsage: 2, leadTimeDays: 5, safetyStock: 8, location: 'N-01-01' },
+      { productId: 'PRD-005', onHand: 65, reserved: 30, minStock: 10, reorderLevel: 18, avgDailyUsage: 0.8, leadTimeDays: 7, safetyStock: 6, location: 'N-01-02' },
+      { productId: 'PRD-014', onHand: 110, reserved: 0, minStock: 20, reorderLevel: 35, avgDailyUsage: 2.5, leadTimeDays: 3, safetyStock: 10, location: 'N-02-01' },
+      { productId: 'PRD-017', onHand: 40, reserved: 0, minStock: 10, reorderLevel: 18, avgDailyUsage: 1, leadTimeDays: 5, safetyStock: 6, location: 'N-02-02' },
+      { productId: 'PRD-031', onHand: 25, reserved: 0, minStock: 8, reorderLevel: 14, avgDailyUsage: 0.6, leadTimeDays: 7, safetyStock: 5, location: 'N-03-01' },
+      { productId: 'PRD-006', onHand: 55, reserved: 0, minStock: 20, reorderLevel: 30, avgDailyUsage: 2, leadTimeDays: 3, safetyStock: 8, location: 'N-03-02' },
+      { productId: 'PRD-009', onHand: 80, reserved: 0, minStock: 30, reorderLevel: 45, avgDailyUsage: 3, leadTimeDays: 3, safetyStock: 10, location: 'N-04-01' },
+      { productId: 'PRD-019', onHand: 12, reserved: 0, minStock: 10, reorderLevel: 16, avgDailyUsage: 1, leadTimeDays: 4, safetyStock: 5, location: 'N-04-02' },
+      { productId: 'PRD-004', onHand: 5, reserved: 0, minStock: 12, reorderLevel: 20, avgDailyUsage: 1.2, leadTimeDays: 6, safetyStock: 6, location: 'N-05-01' },
+      { productId: 'PRD-022', onHand: 3, reserved: 0, minStock: 8, reorderLevel: 14, avgDailyUsage: 0.5, leadTimeDays: 8, safetyStock: 4, location: 'N-05-02' }
+    ];
+    branchSeed.forEach(function (row, idx) {
+      inventory.push(Object.assign({}, row, {
+        id: 'INV-' + String(inventory.length + 1).padStart(3, '0'),
+        warehouseId: 'WH-B01-B',
+        lastPurchaseDate: daysAgo(8 + idx).slice(0, 10),
+        updatedAt: isoDaysAgo(idx % 4)
+      }));
+    });
+
     const shortages = [
-      { id: 'SH-001', warehouseId: 'WH-B01-A', productId: 'PRD-001', requestedQty: 100, source: 'auto', urgency: 'high', notes: '', createdAt: daysAgo(1) },
-      { id: 'SH-002', warehouseId: 'WH-B01-A', productId: 'PRD-005', requestedQty: 50, source: 'auto', urgency: 'critical', notes: 'نفد المخزون', createdAt: daysAgo(1) },
-      { id: 'SH-003', warehouseId: 'WH-B01-A', productId: 'PRD-014', requestedQty: 80, source: 'auto', urgency: 'critical', notes: '', createdAt: daysAgo(1) },
-      { id: 'SH-004', warehouseId: 'WH-B01-A', productId: 'PRD-017', requestedQty: 70, source: 'manual', urgency: 'high', notes: '', createdAt: daysAgo(0) },
-      { id: 'SH-005', warehouseId: 'WH-B01-A', productId: 'PRD-031', requestedQty: 30, source: 'excel', urgency: 'critical', notes: 'مستورد من Excel', createdAt: daysAgo(0) }
+      { id: 'SH-001', warehouseId: 'WH-B01-A', productId: 'PRD-001', requestedQty: 100, coveredQty: 20, status: 'partially_covered', source: 'auto', urgency: 'high', notes: '', linkedReservationIds: ['RSV-001'], linkedRequestId: null, createdAt: daysAgo(1) },
+      { id: 'SH-002', warehouseId: 'WH-B01-A', productId: 'PRD-005', requestedQty: 50, coveredQty: 0, status: 'open', source: 'auto', urgency: 'critical', notes: 'نفد المخزون', linkedReservationIds: [], linkedRequestId: null, createdAt: daysAgo(1) },
+      { id: 'SH-003', warehouseId: 'WH-B01-A', productId: 'PRD-014', requestedQty: 80, coveredQty: 0, status: 'open', source: 'auto', urgency: 'critical', notes: '', linkedReservationIds: [], linkedRequestId: null, createdAt: daysAgo(1) },
+      { id: 'SH-004', warehouseId: 'WH-B01-A', productId: 'PRD-017', requestedQty: 70, coveredQty: 0, status: 'open', source: 'manual', urgency: 'high', notes: '', linkedReservationIds: [], linkedRequestId: null, createdAt: daysAgo(0) },
+      { id: 'SH-005', warehouseId: 'WH-B01-A', productId: 'PRD-031', requestedQty: 30, coveredQty: 0, status: 'open', source: 'excel', urgency: 'critical', notes: 'مستورد من Excel', linkedReservationIds: [], linkedRequestId: null, createdAt: daysAgo(0) },
+      { id: 'SH-006', warehouseId: 'WH-B01-B', productId: 'PRD-004', requestedQty: 25, coveredQty: 0, status: 'open', source: 'auto', urgency: 'high', notes: 'نقص في الفرع', linkedReservationIds: [], linkedRequestId: null, createdAt: daysAgo(0) },
+      { id: 'SH-007', warehouseId: 'WH-B01-B', productId: 'PRD-022', requestedQty: 15, coveredQty: 0, status: 'open', source: 'manual', urgency: 'medium', notes: '', linkedReservationIds: [], linkedRequestId: null, createdAt: daysAgo(0) }
+    ];
+
+    const reservations = [
+      { id: 'RSV-001', orgId: 'ORG-B01', productId: 'PRD-001', qty: 20, fromWarehouseId: 'WH-B01-B', toWarehouseId: 'WH-B01-A', shortageId: 'SH-001', status: 'received', transferId: 'TR-001', createdBy: 'USR-BO1', createdAt: daysAgo(2), updatedAt: daysAgo(1), notes: 'تغطية جزئية من فرع مدينة نصر' },
+      { id: 'RSV-002', orgId: 'ORG-B01', productId: 'PRD-005', qty: 30, fromWarehouseId: 'WH-B01-B', toWarehouseId: 'WH-B01-A', shortageId: 'SH-002', status: 'reserved', transferId: 'TR-003', createdBy: 'USR-BO1', createdAt: daysAgo(0), updatedAt: daysAgo(0), notes: 'بانتظار الشحن' },
+      { id: 'RSV-003', orgId: 'ORG-B01', productId: 'PRD-014', qty: 40, fromWarehouseId: 'WH-B01-B', toWarehouseId: 'WH-B01-A', shortageId: 'SH-003', status: 'requested', transferId: null, createdBy: 'USR-BP1', createdAt: daysAgo(0), updatedAt: daysAgo(0), notes: 'طلب حجز من الفرع' }
     ];
 
     const transfers = [
-      { id: 'TR-001', fromWarehouseId: 'WH-B01-A', toWarehouseId: 'WH-B01-B', status: 'completed', createdAt: daysAgo(2), items: [{ productId: 'PRD-006', qty: 10 }] },
-      { id: 'TR-002', fromWarehouseId: 'WH-B01-A', toWarehouseId: 'WH-B01-B', status: 'pending', createdAt: daysAgo(0), items: [{ productId: 'PRD-009', qty: 20 }, { productId: 'PRD-023', qty: 10 }] }
+      { id: 'TR-001', fromWarehouseId: 'WH-B01-B', toWarehouseId: 'WH-B01-A', status: 'completed', reservationId: 'RSV-001', createdAt: daysAgo(2), shippedAt: daysAgo(2), receivedAt: daysAgo(1), updatedAt: daysAgo(1), items: [{ productId: 'PRD-001', qty: 20 }], notes: 'تغطية نقص أوجمنتين' },
+      { id: 'TR-002', fromWarehouseId: 'WH-B01-A', toWarehouseId: 'WH-B01-B', status: 'pending', reservationId: null, createdAt: daysAgo(0), updatedAt: daysAgo(0), items: [{ productId: 'PRD-009', qty: 20 }, { productId: 'PRD-023', qty: 10 }], notes: 'تحويل روتيني' },
+      { id: 'TR-003', fromWarehouseId: 'WH-B01-B', toWarehouseId: 'WH-B01-A', status: 'reserved', reservationId: 'RSV-002', createdAt: daysAgo(0), updatedAt: daysAgo(0), items: [{ productId: 'PRD-005', qty: 30 }], notes: 'حجز بلاتكس للرئيسي' }
     ];
 
     const countSessions = [
@@ -602,10 +633,11 @@ window.DemoData = (function () {
 
     return {
       meta: {
-        version: '1.0.0',
+        version: '1.1.0',
         seededAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        demo: true
+        demo: true,
+        feature: 'shortage_cycle'
       },
       products: PRODUCTS.map(function (p) {
         return Object.assign({}, p, { active: true, archived: false });
@@ -625,6 +657,7 @@ window.DemoData = (function () {
       customers: customers,
       salesInvoices: salesInvoices,
       shortages: shortages,
+      reservations: reservations,
       transfers: transfers,
       countSessions: countSessions,
       auditLogs: auditLogs,
@@ -639,11 +672,13 @@ window.DemoData = (function () {
         request: 15,
         offer: 20,
         po: 10,
-        shortage: 5,
+        shortage: 7,
         movement: 15,
         notification: 15,
         product: 52,
-        transfer: 2,
+        transfer: 3,
+        reservation: 3,
+        inventory: inventory.length,
         count: 2
       }
     };

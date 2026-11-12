@@ -154,5 +154,40 @@ window.InventoryService = (function () {
     });
   }
 
-  return { list, inventoryValue, adjust, receive, movements, expirationBuckets, detectShortages };
+  function warehousesForOrg(orgId) {
+    return DataAPI.data().warehouses.filter(function (w) { return w.orgId === orgId; });
+  }
+
+  function stockAcrossWarehouses(orgId, productId) {
+    return warehousesForOrg(orgId).map(function (w) {
+      const row = DataAPI.getInventoryRow(w.id, productId);
+      const available = row ? DataAPI.availableQty(row) : 0;
+      return {
+        warehouseId: w.id,
+        warehouse: w,
+        onHand: row ? (row.onHand || 0) : 0,
+        reserved: row ? (row.reserved || 0) : 0,
+        available: available
+      };
+    });
+  }
+
+  function peerAvailability(orgId, productId, excludeWarehouseId) {
+    return stockAcrossWarehouses(orgId, productId).filter(function (s) {
+      return s.warehouseId !== excludeWarehouseId && s.available > 0;
+    });
+  }
+
+  return {
+    list: list,
+    inventoryValue: inventoryValue,
+    adjust: adjust,
+    receive: receive,
+    movements: movements,
+    expirationBuckets: expirationBuckets,
+    detectShortages: detectShortages,
+    warehousesForOrg: warehousesForOrg,
+    stockAcrossWarehouses: stockAcrossWarehouses,
+    peerAvailability: peerAvailability
+  };
 })();
